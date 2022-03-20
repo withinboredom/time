@@ -2,7 +2,7 @@
 
 namespace Withinboredom\Time;
 
-final class ReadableSeconds implements TimeConverterInterface
+final class ReadableSeconds implements ReadableConverterInterface
 {
     public function __construct(private float $constant, private TimeAndSpaceInterface $spacetime)
     {
@@ -14,9 +14,9 @@ final class ReadableSeconds implements TimeConverterInterface
     }
     
     public static function from(
-        float|int|TimeConverterInterface $time,
+        float|int|ReadableConverterInterface $time,
         TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ): TimeConverterInterface {
+    ): ReadableConverterInterface {
         return Seconds::from($time, $spacetime);
     }
     

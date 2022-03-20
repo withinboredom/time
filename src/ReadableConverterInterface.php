@@ -2,7 +2,7 @@
 
 namespace Withinboredom\Time;
 
-interface TimeConverterInterface
+interface ReadableConverterInterface
 {
     public function microseconds(): float;
     

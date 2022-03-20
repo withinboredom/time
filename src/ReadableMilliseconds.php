@@ -2,7 +2,7 @@
 
 namespace Withinboredom\Time;
 
-final class ReadableMilliseconds implements TimeConverterInterface
+final class ReadableMilliseconds implements ReadableConverterInterface
 {
     public function __construct(private float $constant, private TimeAndSpaceInterface $spacetime)
     {

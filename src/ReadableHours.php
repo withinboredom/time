@@ -2,7 +2,7 @@
 
 namespace Withinboredom\Time;
 
-final class ReadableHours implements TimeConverterInterface
+final class ReadableHours implements ReadableConverterInterface
 {
     public function __construct(private float $constant, private TimeAndSpaceInterface $spacetime)
     {

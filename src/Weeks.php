@@ -30,7 +30,7 @@ final class Weeks implements ConvertedTimeInterface
     public static function from(
         float|int $time,
         TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ): TimeConverterInterface {
+    ): ReadableConverterInterface {
         return new ReadableWeeks($time, $spacetime);
     }
     

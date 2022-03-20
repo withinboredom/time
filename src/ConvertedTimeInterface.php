@@ -7,7 +7,7 @@ interface ConvertedTimeInterface
     public static function from(
         int|float $time,
         TimeAndSpaceInterface $spacetime
-    ): TimeConverterInterface;
+    ): ReadableConverterInterface;
     
     public function inMicroseconds(): float;
     

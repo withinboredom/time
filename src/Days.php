@@ -28,7 +28,7 @@ final class Days implements ConvertedTimeInterface
     public static function from(
         float|int $time,
         TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ): TimeConverterInterface {
+    ): ReadableConverterInterface {
         return new ReadableDays($time, $spacetime);
     }
     

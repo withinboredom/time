@@ -30,7 +30,7 @@ final class Seconds implements ConvertedTimeInterface
     public static function from(
         int|float $time,
         TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ): TimeConverterInterface {
+    ): ReadableConverterInterface {
         return new ReadableSeconds($time, $spacetime);
     }
     
