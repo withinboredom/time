@@ -1,16 +1,23 @@
 # A really simple library for converting time
 
-This libary is for converting between time between units.
+This library is for converting between time between units in either a english-readable form:
 
 ```php
 // sleep for 300 seconds
 sleep(\Withinboredom\Time\Seconds::from(5)->minutes())
+
+// sleep for quarter of a millisecond
+usleep(\Withinboredom\Time\Microseconds::from(0.25)->milliseconds());
 ```
 
-or
+or in an OOP form:
 
 ```php
+// sleep for 300 seconds 
 sleep((new \Withinboredom\Time\Minutes(5))->inSeconds())
+
+// sleep for quarter of a millisecond
+usleep((new \Withinboredom\Time\Milliseconds(0.25))->inMicroseconds())
 ```
 
 If you need to change the conversion rates, just create a new standard:
@@ -60,4 +67,15 @@ There's no set days in a month/year, so it's better to use `DateInterval` for th
 
 > Why does this exist?
 
-I don't like [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)#:~:text=Magic%20numbers%20are%20common%20in%20programs%20across%20many,have%20such%20constants%20that%20identify%20the%20contained%20data.).
+I don't
+like [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)#:~:text=Magic%20numbers%20are%20common%20in%20programs%20across%20many,have%20such%20constants%20that%20identify%20the%20contained%20data.)
+.
+
+> Can I convert between standards?
+
+Not yet.
+
+> How performant is this?
+
+The main overhead is in autoloading and function-call overhead. Thus, if realtime performance is a concern, you might
+want to stick to magic numbers.
