@@ -1,0 +1,20 @@
+{
+    "name": "withinboredom/time",
+    "description": "Converting time to units",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Withinboredom\\Time\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rob Landers",
+            "email": "landers.robert@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
