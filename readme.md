@@ -50,6 +50,8 @@ class SolarTimeStandard implements \Withinboredom\Time\TimeAndSpaceInterface {
 }
 ```
 
+This can be (mis)used to allow for very short times in unit tests (to make a week pass by in literally microseconds).
+
 ## Units
 
 - Microseconds
