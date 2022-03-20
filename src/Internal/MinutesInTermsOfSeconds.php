@@ -8,8 +8,8 @@ trait MinutesInTermsOfSeconds
 {
     private TimeAndSpaceInterface $spacetime;
     
-    public function minutes(): float
+    public function inMinutes(): float
     {
-        return $this->seconds() / $this->spacetime->secondsInMinutes();
+        return $this->inSeconds() / $this->spacetime->secondsInMinutes();
     }
 }

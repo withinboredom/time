@@ -8,8 +8,8 @@ trait WeeksInTermsOfDays
 {
     private TimeAndSpaceInterface $spacetime;
     
-    public function weeks(): float
+    public function inWeeks(): float
     {
-        return $this->days() / $this->spacetime->daysInWeeks();
+        return $this->inDays() / $this->spacetime->daysInWeeks();
     }
 }

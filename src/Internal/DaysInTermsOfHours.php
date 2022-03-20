@@ -7,7 +7,7 @@ use Withinboredom\Time\TimeAndSpaceInterface;
 trait DaysInTermsOfHours {
     private TimeAndSpaceInterface $spacetime;
     
-    public function days(): float {
-        return $this->hours() / $this->spacetime->hoursInDays();
+    public function inDays(): float {
+        return $this->inHours() / $this->spacetime->hoursInDays();
     }
 }

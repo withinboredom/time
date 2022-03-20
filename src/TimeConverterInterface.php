@@ -4,11 +4,6 @@ namespace Withinboredom\Time;
 
 interface TimeConverterInterface
 {
-    public static function from(
-        int|float|TimeConverterInterface $time,
-        TimeAndSpaceInterface $spacetime
-    ): TimeConverterInterface;
-    
     public function microseconds(): float;
     
     public function milliseconds(): float;

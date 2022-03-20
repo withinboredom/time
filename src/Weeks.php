@@ -2,6 +2,7 @@
 
 namespace Withinboredom\Time;
 
+use JetBrains\PhpStorm\Pure;
 use Withinboredom\Time\Internal\DaysInTermsOfWeeks;
 use Withinboredom\Time\Internal\HoursInTermsOfDays;
 use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
@@ -9,7 +10,7 @@ use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfHours;
 use Withinboredom\Time\Internal\SecondsInTermsOfMinutes;
 
-final class Weeks implements TimeConverterInterface
+final class Weeks implements ConvertedTimeInterface
 {
     use DaysInTermsOfWeeks;
     use HoursInTermsOfDays;
@@ -18,23 +19,22 @@ final class Weeks implements TimeConverterInterface
     use MillisecondsInTermsOfSeconds;
     use MicrosecondsInTermsOfMilliseconds;
     
+    #[Pure]
     public function __construct(
         private float $weeks,
         private TimeAndSpaceInterface $spacetime = new StandardEarthTime()
     ) {
     }
     
+    #[Pure]
     public static function from(
-        float|int|TimeConverterInterface $time,
+        float|int $time,
         TimeAndSpaceInterface $spacetime = new StandardEarthTime()
     ): TimeConverterInterface {
-        return match (true) {
-            $time instanceof TimeConverterInterface => new Weeks($time->weeks(), $spacetime),
-            default => new Weeks($time, $spacetime)
-        };
+        return new ReadableWeeks($time, $spacetime);
     }
     
-    public function weeks(): float
+    public function inWeeks(): float
     {
         return $this->weeks;
     }

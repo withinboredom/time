@@ -8,8 +8,8 @@ trait MillisecondsInTermsOfSeconds
 {
     private TimeAndSpaceInterface $spacetime;
     
-    public function milliseconds(): float
+    public function inMilliseconds(): float
     {
-        return $this->seconds() * $this->spacetime->millisecondsInSeconds();
+        return $this->inSeconds() * $this->spacetime->millisecondsInSeconds();
     }
 }

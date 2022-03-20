@@ -8,8 +8,8 @@ trait HoursInTermsOfDays
 {
     private TimeAndSpaceInterface $spacetime;
     
-    public function hours(): float
+    public function inHours(): float
     {
-        return $this->days() * $this->spacetime->hoursInDays();
+        return $this->inDays() * $this->spacetime->hoursInDays();
     }
 }
