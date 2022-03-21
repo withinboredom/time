@@ -27,7 +27,7 @@ or in a simplified form:
 sleep(Minutes(5)->inSeconds());
 
 // sleep for a quarter of a millisecond
-usleep(Milliseconds(0.25)->inMicroseconds);
+usleep(Milliseconds(0.25)->inMicroseconds());
 ```
 
 If you need to change the conversion rates, just create a new standard:
