@@ -20,6 +20,16 @@ sleep((new \Withinboredom\Time\Minutes(5))->inSeconds())
 usleep((new \Withinboredom\Time\Milliseconds(0.25))->inMicroseconds())
 ```
 
+or in a simplified form:
+
+```php
+// sleep for 300 seconds
+sleep(Minutes(5)->inSeconds());
+
+// sleep for a quarter of a millisecond
+usleep(Milliseconds(0.25)->inMicroseconds);
+```
+
 If you need to change the conversion rates, just create a new standard:
 
 ```php

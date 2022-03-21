@@ -13,7 +13,17 @@ class ConversionTest extends TestCase
     private const EXPECTED_SECONDS = 1209600.0;
     private const EXPECTED_MILLISECONDS = 1209600000.0;
     private const EXPECTED_MICROSECONDS = 1209600000000.0;
-    
+
+    public function testFunctions() {
+        $this->assertSame(2.0, Microseconds(2)->inMicroseconds());
+        $this->assertSame(2.0, Milliseconds(2)->inMilliseconds());
+        $this->assertSame(2.0, Seconds(2)->inSeconds());
+        $this->assertSame(2.0, Minutes(2)->inMinutes());
+        $this->assertSame(2.0, Hours(2)->inHours());
+        $this->assertSame(2.0, Days(2)->inDays());
+        $this->assertSame(2.0, Weeks(2)->inWeeks());
+    }
+
     public function testMicroseconds()
     {
         $weeks = Weeks::from(self::EXPECTED_MICROSECONDS)->microseconds();

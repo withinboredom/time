@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "Withinboredom\\Time\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "authors": [
         {
