@@ -2,8 +2,6 @@
 
 namespace Withinboredom\Time\Internal;
 
-use Withinboredom\Time\TimeAndSpaceInterface;
-
 trait HoursInTermsOfMinutes
 {
     protected function toHours(): float|int

@@ -34,7 +34,7 @@ test('unit', function (string $className, int $week) {
 
 test('equality', function () {
     $secondInMs = Milliseconds::fromValue(1000);
-    $second = Seconds::from($secondInMs);
+    $second = Days::from($secondInMs);
     expect($second)->toBe(Seconds::fromValue(1));
 });
 

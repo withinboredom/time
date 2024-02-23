@@ -2,8 +2,6 @@
 
 namespace Withinboredom\Time\Internal;
 
-use Withinboredom\Time\TimeAndSpaceInterface;
-
 trait SecondsInTermsOfMilliseconds
 {
     protected function toSeconds(): float|int

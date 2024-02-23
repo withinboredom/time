@@ -6,7 +6,6 @@ use Withinboredom\Time\Internal\DaysInTermsOfHours;
 use Withinboredom\Time\Internal\HoursInTermsOfMinutes;
 use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfSeconds;
-use Withinboredom\Time\Internal\NanosecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\SecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\WeeksInTermsOfDays;
 
@@ -18,7 +17,6 @@ final class Milliseconds extends AnyTime
     use MinutesInTermsOfSeconds;
     use SecondsInTermsOfMilliseconds;
     use MicrosecondsInTermsOfMilliseconds;
-    use NanosecondsInTermsOfMicroseconds;
 
     #[\Override] public static function from(AnyTime $time): static
     {
@@ -28,5 +26,10 @@ final class Milliseconds extends AnyTime
     #[\Override] protected function toMilliseconds(): float|int
     {
         return $this->getValue();
+    }
+
+    #[\Override] protected function toNanoseconds(): float|int
+    {
+        return $this->spacetime->us2ns($this->toMicroseconds());
     }
 }

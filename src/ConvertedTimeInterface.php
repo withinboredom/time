@@ -2,8 +2,6 @@
 
 namespace Withinboredom\Time;
 
-use Pest\Matchers\Any;
-
 interface ConvertedTimeInterface
 {
     public static function from(

@@ -38,4 +38,14 @@ final class StandardEarthTime implements TimeAndSpaceInterface
     {
         return 1000.0;
     }
+
+    #[\Override] public function ns2us(float|int $nanoseconds): float|int
+    {
+        return $nanoseconds / $this->nanosecondsInMicroseconds();
+    }
+
+    #[\Override] public function us2ns(float|int $microseconds): float|int
+    {
+        return $microseconds * $this->nanosecondsInMicroseconds();
+    }
 }

@@ -7,7 +7,6 @@ use Withinboredom\Time\Internal\HoursInTermsOfDays;
 use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfHours;
-use Withinboredom\Time\Internal\NanosecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\SecondsInTermsOfMinutes;
 
 final class Weeks extends AnyTime
@@ -18,7 +17,12 @@ final class Weeks extends AnyTime
     use SecondsInTermsOfMinutes;
     use MillisecondsInTermsOfSeconds;
     use MicrosecondsInTermsOfMilliseconds;
-    use NanosecondsInTermsOfMicroseconds;
+
+    #[\Override] protected function toNanoseconds(): float|int
+    {
+        return $this->spacetime->us2ns($this->toMicroseconds());
+    }
+
     #[\Override] public static function from(AnyTime $time): static
     {
         return self::fromValue($time->toWeeks(), $time->spacetime);

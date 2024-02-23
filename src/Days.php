@@ -2,12 +2,10 @@
 
 namespace Withinboredom\Time;
 
-use JetBrains\PhpStorm\Pure;
 use Withinboredom\Time\Internal\HoursInTermsOfDays;
 use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfHours;
-use Withinboredom\Time\Internal\NanosecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\SecondsInTermsOfMinutes;
 use Withinboredom\Time\Internal\WeeksInTermsOfDays;
 
@@ -21,13 +19,18 @@ final class Days extends AnyTime
     use MicrosecondsInTermsOfMilliseconds;
     use NanosecondsInTermsOfMicroseconds;
 
+    public static function from(AnyTime $time): static
+    {
+        return self::fromValue($time->toDays(), $time->spacetime);
+    }
+
     public function toDays(): float|int
     {
         return $this->getValue();
     }
 
-    public static function from(AnyTime $time): static
+    #[\Override] protected function toNanoseconds(): float|int
     {
-        return self::fromValue($time->toDays(), $time->spacetime);
+        return $this->spacetime->us2ns($this->toMicroseconds());
     }
 }

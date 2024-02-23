@@ -4,15 +4,13 @@ namespace Withinboredom\Time;
 
 use DateInterval;
 
-abstract class AnyTime implements ConvertedTimeInterface
+abstract class AnyTime
 {
     private static array $maps;
 
     private static TimeAndSpaceInterface $earth;
 
-    private function __construct(private readonly float|int $value, protected readonly TimeAndSpaceInterface $spacetime)
-    {
-    }
+    private function __construct(private readonly float|int $value, protected readonly TimeAndSpaceInterface $spacetime) {}
 
     public function getValue(): int|float
     {
@@ -71,7 +69,10 @@ abstract class AnyTime implements ConvertedTimeInterface
         return Seconds::fromValue($this->toSeconds());
     }
 
-    protected function toSeconds(): float|int { return 0; }
+    protected function toSeconds(): float|int
+    {
+        return 0;
+    }
 
     public function inMicroseconds(): Microseconds
     {
@@ -110,20 +111,20 @@ abstract class AnyTime implements ConvertedTimeInterface
 
     public function asWhole(): AnyTime
     {
-        return static::fromValue((int)$this->value, $this->spacetime);
+        return static::fromValue((int) $this->value, $this->spacetime);
     }
 
     public function toDateInterval(): \DateInterval
     {
         $obj = clone $this;
-        $weeks = (int)$obj->toWeeks();
-        $days = (int)$obj->toDays();
+        $weeks = (int) $obj->toWeeks();
+        $days = (int) $obj->toDays();
         $days -= $weeks * $this->spacetime->daysInWeeks();
-        $hours = (int)$obj->toHours();
+        $hours = (int) $obj->toHours();
         $hours -= $days * $this->spacetime->hoursInDays();
-        $minutes = (int)$obj->toMinutes();
+        $minutes = (int) $obj->toMinutes();
         $minutes -= $hours * $this->spacetime->minutesInHours();
-        $seconds = (int)$obj->toSeconds();
+        $seconds = (int) $obj->toSeconds();
         $seconds -= $minutes * $this->spacetime->secondsInMinutes();
 
         $string = [
@@ -140,4 +141,6 @@ abstract class AnyTime implements ConvertedTimeInterface
     }
 
     abstract protected function toMinutes(): float|int;
+
+    abstract public static function from(AnyTime $time): static;
 }

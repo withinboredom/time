@@ -6,6 +6,9 @@ interface TimeAndSpaceInterface
 {
     public function nanosecondsInMicroseconds(): float;
 
+    public function ns2us(float|int $nanoseconds): float|int;
+    public function us2ns(float|int $microseconds): float|int;
+
     public function microsecondsInMilliseconds(): float;
 
     public function millisecondsInSeconds(): float;

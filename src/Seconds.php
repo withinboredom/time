@@ -2,13 +2,11 @@
 
 namespace Withinboredom\Time;
 
-use JetBrains\PhpStorm\Pure;
 use Withinboredom\Time\Internal\DaysInTermsOfHours;
 use Withinboredom\Time\Internal\HoursInTermsOfMinutes;
 use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfSeconds;
-use Withinboredom\Time\Internal\NanosecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\WeeksInTermsOfDays;
 
 final class Seconds extends AnyTime
@@ -19,7 +17,12 @@ final class Seconds extends AnyTime
     use MinutesInTermsOfSeconds;
     use MillisecondsInTermsOfSeconds;
     use MicrosecondsInTermsOfMilliseconds;
-    use NanosecondsInTermsOfMicroseconds;
+
+    #[\Override] protected function toNanoseconds(): float|int
+    {
+        return $this->spacetime->us2ns($this->toMicroseconds());
+    }
+
     #[\Override] protected function toSeconds(): float|int
     {
         return $this->getValue();
