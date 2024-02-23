@@ -8,7 +8,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*.php": "vender/bin/pint",
+    "**/*.php": "vendor/bin/pint",
     "**/*.json": "prettier",
     "**/*.md": "prettier"
   }

@@ -11,6 +11,9 @@ interface TimeAndSpaceInterface
 
     public function microsecondsInMilliseconds(): float;
 
+    public function us2ms(float|int $microseconds): float|int;
+    public function ms2us(float|int $milliseconds): float|int;
+
     public function millisecondsInSeconds(): float;
 
     public function secondsInMinutes(): float;

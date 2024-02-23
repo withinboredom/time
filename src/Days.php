@@ -3,7 +3,6 @@
 namespace Withinboredom\Time;
 
 use Withinboredom\Time\Internal\HoursInTermsOfDays;
-use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfHours;
 use Withinboredom\Time\Internal\SecondsInTermsOfMinutes;
@@ -16,8 +15,11 @@ final class Days extends AnyTime
     use MinutesInTermsOfHours;
     use SecondsInTermsOfMinutes;
     use MillisecondsInTermsOfSeconds;
-    use MicrosecondsInTermsOfMilliseconds;
-    use NanosecondsInTermsOfMicroseconds;
+
+    #[\Override] protected function toMicroseconds(): float|int
+    {
+        return $this->spacetime->ms2us($this->toMilliseconds());
+    }
 
     public static function from(AnyTime $time): static
     {
