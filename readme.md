@@ -1,41 +1,55 @@
 # A really simple library for converting time
 
-This library is for converting between time between units in either a english-readable form:
+This is a simple library for interacting with time durations. You can write your code to expect seconds:
 
 ```php
-// sleep for 300 seconds
-sleep(\Withinboredom\Time\Seconds::from(5)->minutes())
+function sleep(\Withinboredom\Time\Seconds $seconds): void {
+    \sleep($seconds->getValue());
+}
 
-// sleep for quarter of a millisecond
-usleep(\Withinboredom\Time\Microseconds::from(0.25)->milliseconds());
+sleep(\Withinboredom\Time\Minutes(5)->inSeconds());
 ```
 
-or in an OOP form:
+Alternatively, you can just expect any time and do the conversions yourself:
 
 ```php
-// sleep for 300 seconds 
-sleep((new \Withinboredom\Time\Minutes(5))->inSeconds())
+function sleep(\Withinboredom\Time\AnyTime $amount): void {
+    \sleep($amount->inSeconds()->asWhole()->getValue());
+}
 
-// sleep for quarter of a millisecond
-usleep((new \Withinboredom\Time\Milliseconds(0.25))->inMicroseconds())
+sleep(\Withinboredom\Time\Hours(12));
 ```
 
-or in a simplified form:
+## Equality
+
+All values of the same unit are always strongly equaled to each other:
 
 ```php
-// sleep for 300 seconds
-sleep(Minutes(5)->inSeconds());
-
-// sleep for a quarter of a millisecond
-usleep(Milliseconds(0.25)->inMicroseconds());
+\Withinboredom\Time\Minutes::fromValue(60)->inHours() === \Withinboredom\Time\Hours::fromValue(1)
 ```
 
-When writing code that you want to be in a specific
+## Utilities
+
+There are also a few utility methods:
+
+> ->asWhole()
+
+Get a copy of the current duration without any fractional parts. Effectively truncates to an integer.
+
+> ->add(AnyTime)->subtract(AnyTime): AnyTime
+
+Add and subtract durations.
+
+> ->toDateInterval(): DateInterval
+
+Creates a date interval for use in other things.
+
+## Conversions
 
 If you need to change the conversion rates, just create a new standard:
 
 ```php
-class SolarTimeStandard implements \Withinboredom\Time\TimeAndSpaceInterface {
+class Mars implements \Withinboredom\Time\TimeAndSpaceInterface {
     public function microsecondsInMilliseconds(): float {
         return 1000;
     }
@@ -53,11 +67,11 @@ class SolarTimeStandard implements \Withinboredom\Time\TimeAndSpaceInterface {
     }
     
     public function hoursInDays(): float {
-        return 24 + 4.0197E-9;
+        return 25;
     }
     
     public function daysInWeeks(): float {
-        return 7.0;
+        return 12;
     }
 }
 ```
@@ -66,6 +80,7 @@ This can be (mis)used to allow for very short times in unit tests (to make a wee
 
 ## Units
 
+- Nanoseconds
 - Microseconds
 - Milliseconds
 - Minutes
@@ -82,8 +97,7 @@ There's no set days in a month/year, so it's better to use `DateInterval` for th
 > Why does this exist?
 
 I don't
-like [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)#:~:text=Magic%20numbers%20are%20common%20in%20programs%20across%20many,have%20such%20constants%20that%20identify%20the%20contained%20data.)
-.
+like [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)#:~:text=Magic%20numbers%20are%20common%20in%20programs%20across%20many,have%20such%20constants%20that%20identify%20the%20contained%20data.).
 
 > Can I convert between standards?
 
