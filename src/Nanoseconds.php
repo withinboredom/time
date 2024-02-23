@@ -2,20 +2,8 @@
 
 namespace Withinboredom\Time;
 
-use Withinboredom\Time\Internal\DaysInTermsOfHours;
-use Withinboredom\Time\Internal\HoursInTermsOfMinutes;
-use Withinboredom\Time\Internal\MinutesInTermsOfSeconds;
-use Withinboredom\Time\Internal\SecondsInTermsOfMilliseconds;
-use Withinboredom\Time\Internal\WeeksInTermsOfDays;
-
 class Nanoseconds extends AnyTime
 {
-    use WeeksInTermsOfDays;
-    use DaysInTermsOfHours;
-    use HoursInTermsOfMinutes;
-    use MinutesInTermsOfSeconds;
-    use SecondsInTermsOfMilliseconds;
-
     #[\Override] public static function from(AnyTime $time): static
     {
         return self::fromValue($time->toNanoseconds(), $time->spacetime);
@@ -34,5 +22,30 @@ class Nanoseconds extends AnyTime
     #[\Override] protected function toMilliseconds(): float|int
     {
         return $this->spacetime->us2ms($this->toMicroseconds());
+    }
+
+    #[\Override] protected function toSeconds(): float|int
+    {
+        return $this->spacetime->ms2s($this->toMilliseconds());
+    }
+
+    #[\Override] protected function toMinutes(): float|int
+    {
+        return $this->spacetime->s2min($this->toSeconds());
+    }
+
+    #[\Override] protected function toDays(): float|int
+    {
+        return $this->spacetime->h2d($this->toHours());
+    }
+
+    #[\Override] protected function toHours(): float|int
+    {
+        return $this->spacetime->min2h($this->toMinutes());
+    }
+
+    #[\Override] protected function toWeeks(): float|int
+    {
+        return $this->spacetime->d2w($this->toDays());
     }
 }

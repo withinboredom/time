@@ -27,11 +27,13 @@ abstract class AnyTime
         self::$earth ??= new StandardEarthTime();
         $spacetime ??= self::$earth;
 
+        $key = (string) (float) $value;
+
         self::$maps ??= [];
         $map = self::$maps[static::class] ??= new \WeakMap();
         $map[$spacetime] ??= [];
-        $realValue = ($map[$spacetime][$value] ?? null)?->get() ?? new static($value, $spacetime);
-        $map[$spacetime][$value] = \WeakReference::create($realValue);
+        $realValue = ($map[$spacetime][$key] ?? null)?->get() ?? new static($value, $spacetime);
+        $map[$spacetime][$key] = \WeakReference::create($realValue);
 
         return $realValue;
     }
@@ -69,10 +71,7 @@ abstract class AnyTime
         return Seconds::fromValue($this->toSeconds());
     }
 
-    protected function toSeconds(): float|int
-    {
-        return 0;
-    }
+    abstract protected function toSeconds(): float|int;
 
     public function inMicroseconds(): Microseconds
     {
@@ -118,14 +117,14 @@ abstract class AnyTime
     {
         $obj = clone $this;
         $weeks = (int) $obj->toWeeks();
-        $days = (int) $obj->toDays();
+        $totalDays = $days = (int) $obj->toDays();
         $days -= $weeks * $this->spacetime->daysInWeeks();
-        $hours = (int) $obj->toHours();
-        $hours -= $days * $this->spacetime->hoursInDays();
-        $minutes = (int) $obj->toMinutes();
-        $minutes -= $hours * $this->spacetime->minutesInHours();
+        $totalHours = $hours = (int) $obj->toHours();
+        $hours -= $totalDays * $this->spacetime->hoursInDays();
+        $totalMinutes = $minutes = (int) $obj->toMinutes();
+        $minutes -= $totalHours * $this->spacetime->minutesInHours();
         $seconds = (int) $obj->toSeconds();
-        $seconds -= $minutes * $this->spacetime->secondsInMinutes();
+        $seconds -= $totalMinutes * $this->spacetime->secondsInMinutes();
 
         $string = [
             "P",

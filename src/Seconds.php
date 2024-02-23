@@ -2,19 +2,12 @@
 
 namespace Withinboredom\Time;
 
-use Withinboredom\Time\Internal\DaysInTermsOfHours;
-use Withinboredom\Time\Internal\HoursInTermsOfMinutes;
-use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
-use Withinboredom\Time\Internal\MinutesInTermsOfSeconds;
-use Withinboredom\Time\Internal\WeeksInTermsOfDays;
-
 final class Seconds extends AnyTime
 {
-    use WeeksInTermsOfDays;
-    use DaysInTermsOfHours;
-    use HoursInTermsOfMinutes;
-    use MinutesInTermsOfSeconds;
-    use MillisecondsInTermsOfSeconds;
+    #[\Override] protected function toMilliseconds(): float|int
+    {
+        return $this->spacetime->s2ms($this->toSeconds());
+    }
 
     #[\Override] protected function toNanoseconds(): float|int
     {
@@ -34,5 +27,25 @@ final class Seconds extends AnyTime
     #[\Override] protected function toMicroseconds(): float|int
     {
         return $this->spacetime->ms2us($this->toMilliseconds());
+    }
+
+    #[\Override] protected function toMinutes(): float|int
+    {
+        return $this->spacetime->s2min($this->toSeconds());
+    }
+
+    #[\Override] protected function toDays(): float|int
+    {
+        return $this->spacetime->h2d($this->toHours());
+    }
+
+    #[\Override] protected function toHours(): float|int
+    {
+        return $this->spacetime->min2h($this->toMinutes());
+    }
+
+    #[\Override] protected function toWeeks(): float|int
+    {
+        return $this->spacetime->d2w($this->toDays());
     }
 }

@@ -34,7 +34,7 @@ test('unit', function (string $className, int $week) {
 
 test('equality', function () {
     $secondInMs = Milliseconds::fromValue(1000);
-    $second = Days::from($secondInMs);
+    $second = Seconds::from($secondInMs);
     expect($second)->toBe(Seconds::fromValue(1));
 });
 
@@ -46,7 +46,7 @@ test("Date intervals work", function () {
     $var = $var->add(Weeks(1));
 
     $now = new DateTimeImmutable('2024-01-01 00:00:00');
-    $expected = new DateTimeImmutable('2024-01-02 01:01:01');
+    $expected = new DateTimeImmutable($now->format('Y-m-d') . ' +1 week 1 day 1 hour 1 minute 1 second');
 
     expect($now->add($var->toDateInterval()))->toEqual($expected);
 });
