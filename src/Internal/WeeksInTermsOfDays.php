@@ -6,10 +6,8 @@ use Withinboredom\Time\TimeAndSpaceInterface;
 
 trait WeeksInTermsOfDays
 {
-    private TimeAndSpaceInterface $spacetime;
-    
-    public function inWeeks(): float
+    protected function toWeeks(): float|int
     {
-        return $this->inDays() / $this->spacetime->daysInWeeks();
+        return $this->toDays() / $this->spacetime->daysInWeeks();
     }
 }

@@ -2,15 +2,15 @@
 
 namespace Withinboredom\Time;
 
-use JetBrains\PhpStorm\Pure;
 use Withinboredom\Time\Internal\DaysInTermsOfHours;
 use Withinboredom\Time\Internal\HoursInTermsOfMinutes;
 use Withinboredom\Time\Internal\MillisecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfSeconds;
+use Withinboredom\Time\Internal\NanosecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\SecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\WeeksInTermsOfDays;
 
-final class Microseconds implements ConvertedTimeInterface
+final class Microseconds extends AnyTime
 {
     use WeeksInTermsOfDays;
     use DaysInTermsOfHours;
@@ -18,24 +18,15 @@ final class Microseconds implements ConvertedTimeInterface
     use MinutesInTermsOfSeconds;
     use SecondsInTermsOfMilliseconds;
     use MillisecondsInTermsOfMicroseconds;
-    
-    #[Pure]
-    public function __construct(
-        private float $microseconds,
-        private TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ) {
-    }
-    
-    #[Pure]
-    public static function from(
-        float|int $time,
-        TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ): ReadableConverterInterface {
-        return new ReadableMicroseconds($time, $spacetime);
-    }
-    
-    public function inMicroseconds(): float
+    use NanosecondsInTermsOfMicroseconds;
+
+    #[\Override] public static function from(AnyTime $time): static
     {
-        return $this->microseconds;
+        return self::fromValue($time->toMicroseconds(), $time->spacetime);
+    }
+
+    #[\Override] protected function toMicroseconds(): float|int
+    {
+        return $this->getValue();
     }
 }

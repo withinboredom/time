@@ -2,24 +2,39 @@
 
 namespace Withinboredom\Time;
 
+use Pest\Matchers\Any;
+
 interface ConvertedTimeInterface
 {
     public static function from(
-        int|float $time,
-        TimeAndSpaceInterface $spacetime
-    ): ReadableConverterInterface;
-    
-    public function inMicroseconds(): float;
-    
-    public function inSeconds(): float;
-    
-    public function inMilliseconds(): float;
-    
-    public function inMinutes(): float;
-    
-    public function inHours(): float;
-    
-    public function inDays(): float;
-    
-    public function inWeeks(): float;
+        AnyTime $time
+    ): static;
+
+    public static function fromValue(int|float $value, TimeAndSpaceInterface|null $spacetime): static;
+
+    public function getValue(): int|float;
+
+    public function inMicroseconds(): Microseconds;
+
+    public function inSeconds(): Seconds;
+
+    public function inMilliseconds(): Milliseconds;
+
+    public function inMinutes(): Minutes;
+
+    public function inHours(): Hours;
+
+    public function inDays(): Days;
+
+    public function inWeeks(): Weeks;
+
+    public function inNanoseconds(): Nanoseconds;
+
+    public function add(AnyTime $time): AnyTime;
+
+    public function subtract(AnyTime $time): AnyTime;
+
+    public function asWhole(): AnyTime;
+
+    public function toDateInterval(): \DateInterval;
 }

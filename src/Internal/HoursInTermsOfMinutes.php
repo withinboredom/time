@@ -6,10 +6,8 @@ use Withinboredom\Time\TimeAndSpaceInterface;
 
 trait HoursInTermsOfMinutes
 {
-    private TimeAndSpaceInterface $spacetime;
-    
-    public function inHours(): float
+    protected function toHours(): float|int
     {
-        return $this->inMinutes() / $this->spacetime->minutesInHours();
+        return $this->toMinutes() / $this->spacetime->minutesInHours();
     }
 }

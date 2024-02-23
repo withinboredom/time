@@ -6,10 +6,8 @@ use Withinboredom\Time\TimeAndSpaceInterface;
 
 trait HoursInTermsOfDays
 {
-    private TimeAndSpaceInterface $spacetime;
-    
-    public function inHours(): float
+    protected function toHours(): float|int
     {
-        return $this->inDays() * $this->spacetime->hoursInDays();
+        return $this->toDays() * $this->spacetime->hoursInDays();
     }
 }

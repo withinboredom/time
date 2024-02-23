@@ -6,10 +6,8 @@ use Withinboredom\Time\TimeAndSpaceInterface;
 
 trait MicrosecondsInTermsOfMilliseconds
 {
-    private TimeAndSpaceInterface $spacetime;
-    
-    public function inMicroseconds(): float
+    protected function toMicroseconds(): float|int
     {
-        return $this->inMilliseconds() * $this->spacetime->microsecondsInMilliseconds();
+        return $this->toMilliseconds() * $this->spacetime->microsecondsInMilliseconds();
     }
 }

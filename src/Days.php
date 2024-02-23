@@ -7,10 +7,11 @@ use Withinboredom\Time\Internal\HoursInTermsOfDays;
 use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfHours;
+use Withinboredom\Time\Internal\NanosecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\SecondsInTermsOfMinutes;
 use Withinboredom\Time\Internal\WeeksInTermsOfDays;
 
-final class Days implements ConvertedTimeInterface
+final class Days extends AnyTime
 {
     use WeeksInTermsOfDays;
     use HoursInTermsOfDays;
@@ -18,22 +19,15 @@ final class Days implements ConvertedTimeInterface
     use SecondsInTermsOfMinutes;
     use MillisecondsInTermsOfSeconds;
     use MicrosecondsInTermsOfMilliseconds;
-    
-    #[Pure]
-    public function __construct(private float $days, private TimeAndSpaceInterface $spacetime = new StandardEarthTime())
+    use NanosecondsInTermsOfMicroseconds;
+
+    public function toDays(): float|int
     {
+        return $this->getValue();
     }
-    
-    #[Pure]
-    public static function from(
-        float|int $time,
-        TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ): ReadableConverterInterface {
-        return new ReadableDays($time, $spacetime);
-    }
-    
-    public function inDays(): float
+
+    public static function from(AnyTime $time): static
     {
-        return $this->days;
+        return self::fromValue($time->toDays(), $time->spacetime);
     }
 }

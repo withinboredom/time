@@ -8,9 +8,10 @@ use Withinboredom\Time\Internal\HoursInTermsOfMinutes;
 use Withinboredom\Time\Internal\MicrosecondsInTermsOfMilliseconds;
 use Withinboredom\Time\Internal\MillisecondsInTermsOfSeconds;
 use Withinboredom\Time\Internal\MinutesInTermsOfSeconds;
+use Withinboredom\Time\Internal\NanosecondsInTermsOfMicroseconds;
 use Withinboredom\Time\Internal\WeeksInTermsOfDays;
 
-final class Seconds implements ConvertedTimeInterface
+final class Seconds extends AnyTime
 {
     use WeeksInTermsOfDays;
     use DaysInTermsOfHours;
@@ -18,24 +19,14 @@ final class Seconds implements ConvertedTimeInterface
     use MinutesInTermsOfSeconds;
     use MillisecondsInTermsOfSeconds;
     use MicrosecondsInTermsOfMilliseconds;
-    
-    #[Pure]
-    public function __construct(
-        private float $seconds,
-        private TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ) {
-    }
-    
-    #[Pure]
-    public static function from(
-        int|float $time,
-        TimeAndSpaceInterface $spacetime = new StandardEarthTime()
-    ): ReadableConverterInterface {
-        return new ReadableSeconds($time, $spacetime);
-    }
-    
-    public function inSeconds(): float
+    use NanosecondsInTermsOfMicroseconds;
+    #[\Override] protected function toSeconds(): float|int
     {
-        return $this->seconds;
+        return $this->getValue();
+    }
+
+    #[\Override] public static function from(AnyTime $time): static
+    {
+        return self::fromValue($time->toSeconds(), $time->spacetime);
     }
 }
