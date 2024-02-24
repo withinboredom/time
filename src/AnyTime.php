@@ -87,6 +87,21 @@ abstract class AnyTime
 
     abstract protected function toNanoseconds(): float|int;
 
+    public function __clone(): void
+    {
+        throw new \LogicException('Please use from() to clone.');
+    }
+
+    public function __wakeup(): void
+    {
+        throw new \LogicException('Please use from() to deserialize');
+    }
+
+    public function __sleep(): array
+    {
+        throw new \LogicException('Time cannot be serialized.');
+    }
+
     public function add(AnyTime $time): AnyTime
     {
         if ($time->spacetime !== $this->spacetime) {

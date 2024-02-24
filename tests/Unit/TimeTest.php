@@ -36,6 +36,7 @@ test('equality', function () {
     $secondInMs = Milliseconds::fromValue(1000);
     $second = Seconds::from($secondInMs);
     expect($second)->toBe(Seconds::fromValue(1));
+    expect($second)->toEqual(Seconds::fromValue(1));
 });
 
 test("Date intervals work", function () {
@@ -49,4 +50,14 @@ test("Date intervals work", function () {
     $expected = new DateTimeImmutable($now->format('Y-m-d') . ' +1 week 1 day 1 hour 1 minute 1 second');
 
     expect($now->add($var->toDateInterval()))->toEqual($expected);
+});
+
+it('cannot be serialized', function () {
+    $var = Seconds(1);
+    expect(fn() => serialize($var))->toThrow(LogicException::class);
+});
+
+it('cannot be cloned', function () {
+    $var = Seconds(1);
+    expect(fn() => clone $var)->toThrow(LogicException::class);
 });
