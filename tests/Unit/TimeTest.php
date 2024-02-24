@@ -63,3 +63,13 @@ it('cannot be cloned', function () {
     $var = Seconds(1);
     expect(fn() => clone $var)->toThrow(LogicException::class);
 });
+
+it('can be compared', function () {
+    $middle = Seconds(3);
+    $left  = Seconds(1);
+    $right = Seconds(5);
+
+    expect($left < $middle)->toBeTrue()
+        ->and($right > $middle)->toBeTrue()
+        ->and($left < $right)->toBeTrue();
+});
