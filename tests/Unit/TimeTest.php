@@ -49,7 +49,9 @@ test("Date intervals work", function () {
     $now = new DateTimeImmutable('2024-01-01 00:00:00');
     $expected = new DateTimeImmutable($now->format('Y-m-d') . ' +1 week 1 day 1 hour 1 minute 1 second');
 
-    expect($now->add($var->toDateInterval()))->toEqual($expected);
+    expect($var->inSeconds()->getValue())->toBe(694861.0)
+        ->and($now->add($var->toDateInterval()))->toEqual($expected)
+        ->and($var->inSeconds()->getValue())->toBe(694861.0);
 });
 
 it('cannot be serialized', function () {

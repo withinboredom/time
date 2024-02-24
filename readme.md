@@ -107,3 +107,16 @@ Not yet.
 
 The main overhead is in autoloading and function-call overhead. Thus, if realtime performance is a concern, you might
 want to stick to magic numbers.
+
+## Developing
+
+If you wish to create a PR or update the code here:
+
+1. Clone the repo
+2. `composer install` to install test dependencies
+3. `yarn` to install git hooks for formatting
+4. Open in favorite IDE.
+
+## Code Standards
+
+[Per](https://www.php-fig.org/per/coding-style/) coding styles are followed.

@@ -130,7 +130,7 @@ abstract class AnyTime
 
     public function toDateInterval(): \DateInterval
     {
-        $obj = clone $this;
+        $obj = $this;
         $weeks = (int) $obj->toWeeks();
         $totalDays = $days = (int) $obj->toDays();
         $days -= $weeks * $this->spacetime->daysInWeeks();
