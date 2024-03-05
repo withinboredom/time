@@ -12,6 +12,12 @@ final class AnyTime
 
     private function __construct(private readonly float|int $value, protected readonly TimeAndSpaceInterface $spacetime) {}
 
+    public function __destruct()
+    {
+        $key = (string) $this->value;
+        unset(self::$maps[$this->spacetime][$key]);
+    }
+
     public function getValue(): int|float
     {
         return $this->value;
