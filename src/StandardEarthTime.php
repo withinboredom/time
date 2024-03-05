@@ -2,110 +2,127 @@
 
 namespace Withinboredom\Time;
 
+use Override;
+
 final class StandardEarthTime implements TimeAndSpaceInterface
 {
-    #[\Override] public function daysInWeeks(): float
+    private static StandardEarthTime $duration;
+
+    public static function duration(): self
     {
-        return 7.0;
+        return self::$duration ??= new self();
     }
 
-    #[\Override] public function hoursInDays(): float
+    #[Override] public function fromNanoSeconds(int $nanoseconds): AnyTime
     {
-        return 24.0;
+        return AnyTime::fromValue($nanoseconds, $this);
     }
 
-    #[\Override] public function microsecondsInMilliseconds(): float
+    #[Override] public function fromMicroseconds(float $microseconds): AnyTime
     {
-        return 1000.0;
+        return AnyTime::fromValue($this->microsecondsToNanoSeconds($microseconds), $this);
     }
 
-    #[\Override] public function millisecondsInSeconds(): float
+    #[Override] public function microsecondsToNanoSeconds(float $microseconds): float
     {
-        return 1000.0;
+        return 1000.0 * $microseconds;
     }
 
-    #[\Override] public function minutesInHours(): float
+    #[Override] public function fromMilliseconds(float $milliseconds): AnyTime
     {
-        return 60.0;
+        return AnyTime::fromValue(
+            $this->microsecondsToNanoSeconds($this->millisecondsToMicroseconds($milliseconds)),
+            $this
+        );
     }
 
-    #[\Override] public function secondsInMinutes(): float
+    #[Override] public function millisecondsToMicroseconds(float $microseconds): float
     {
-        return 60.0;
+        return $microseconds * 1000.0;
     }
 
-    #[\Override] public function nanosecondsInMicroseconds(): float
+    #[Override] public function fromSeconds(float $seconds): AnyTime
     {
-        return 1000.0;
+        return AnyTime::fromValue(
+            $this->microsecondsToNanoSeconds($this->millisecondsToMicroseconds($this->secondsToMilliseconds($seconds))),
+            $this
+        );
     }
 
-    #[\Override] public function ns2us(float|int $nanoseconds): float|int
+    #[Override] public function secondsToMilliseconds(float $seconds): float
     {
-        return $nanoseconds / $this->nanosecondsInMicroseconds();
+        return $seconds * 1000.0;
     }
 
-    #[\Override] public function us2ns(float|int $microseconds): float|int
+    #[Override] public function fromMinutes(float $minutes): AnyTime
     {
-        return $microseconds * $this->nanosecondsInMicroseconds();
+        return AnyTime::fromValue(
+            $this->microsecondsToNanoSeconds(
+                $this->millisecondsToMicroseconds($this->secondsToMilliseconds($this->minutesToSeconds($minutes)))
+            ),
+            $this
+        );
     }
 
-    #[\Override] public function us2ms(float|int $microseconds): float|int
+    #[Override] public function minutesToSeconds(float $minutes): float
     {
-        return $microseconds / $this->microsecondsInMilliseconds();
+        return $minutes * 60.0;
     }
 
-    #[\Override] public function ms2us(float|int $milliseconds): float|int
+    #[Override] public function fromHours(float $hours): AnyTime
     {
-        return $milliseconds * $this->microsecondsInMilliseconds();
+        return AnyTime::fromValue(
+            $this->microsecondsToNanoSeconds(
+                $this->millisecondsToMicroseconds(
+                    $this->secondsToMilliseconds($this->minutesToSeconds($this->hoursToMinutes($hours)))
+                )
+            ),
+            $this
+        );
     }
 
-    #[\Override] public function ms2s(float|int $milliseconds): float|int
+    #[Override] public function hoursToMinutes(float $hours): float
     {
-        return $milliseconds / $this->millisecondsInSeconds();
+        return $hours * 60.0;
     }
 
-    #[\Override] public function s2ms(float|int $milliseconds): float|int
+    #[Override] public function fromDays(float $days): AnyTime
     {
-        return $milliseconds * $this->millisecondsInSeconds();
+        return AnyTime::fromValue(
+            $this->microsecondsToNanoSeconds(
+                $this->millisecondsToMicroseconds(
+                    $this->secondsToMilliseconds(
+                        $this->minutesToSeconds($this->hoursToMinutes($this->daysToHours($days)))
+                    )
+                )
+            ),
+            $this
+        );
     }
 
-    #[\Override] public function s2min(float|int $seconds): float|int
+    #[Override] public function daysToHours(float $days): float
     {
-        return $seconds / $this->secondsInMinutes();
+        return $days * 24.0;
     }
 
-    #[\Override] public function min2s(float|int $minutes): float|int
+    #[Override] public function fromWeeks(float $weeks): AnyTime
     {
-        return $minutes * $this->secondsInMinutes();
+        return AnyTime::fromValue(
+            $this->microsecondsToNanoSeconds(
+                $this->millisecondsToMicroseconds(
+                    $this->secondsToMilliseconds(
+                        $this->minutesToSeconds(
+                            $this->hoursToMinutes($this->daysToHours($this->weeksToDays($weeks)))
+                        )
+                    )
+                )
+            ),
+            $this
+        );
     }
 
-    #[\Override] public function min2h(float|int $minutes): float|int
+    #[Override] public function weeksToDays(float $weeks): float
     {
-        return $minutes / $this->minutesInHours();
-    }
-
-    #[\Override] public function h2min(float|int $hours): float|int
-    {
-        return $hours * $this->minutesInHours();
-    }
-
-    #[\Override] public function h2d(float|int $hours): float|int
-    {
-        return $hours / $this->hoursInDays();
-    }
-
-    #[\Override] public function d2h(float|int $days): float|int
-    {
-        return $days * $this->hoursInDays();
-    }
-
-    #[\Override] public function d2w(float|int $days): float|int
-    {
-        return $days / $this->daysInWeeks();
-    }
-
-    #[\Override] public function w2d(float|int $weeks): float|int
-    {
-        return $weeks * $this->daysInWeeks();
+        return $weeks * 7.0;
     }
 }

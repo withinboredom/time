@@ -3,12 +3,12 @@
 namespace Withinboredom\Time;
 
 use DateInterval;
+use WeakMap;
+use WeakReference;
 
-abstract class AnyTime
+final class AnyTime
 {
-    private static array $maps;
-
-    private static TimeAndSpaceInterface $earth;
+    private static WeakMap $maps;
 
     private function __construct(private readonly float|int $value, protected readonly TimeAndSpaceInterface $spacetime) {}
 
@@ -17,75 +17,58 @@ abstract class AnyTime
         return $this->value;
     }
 
-    public function inDays(): Days
+    public static function fromValue(int $nanoseconds, TimeAndSpaceInterface $spacetime): self
     {
-        return Days::fromValue($this->toDays());
-    }
+        $key = (string) $nanoseconds;
 
-    public static function fromValue(float|int $value, TimeAndSpaceInterface|null $spacetime = null): static
-    {
-        self::$earth ??= new StandardEarthTime();
-        $spacetime ??= self::$earth;
-
-        $key = (string) (float) $value;
-
-        self::$maps ??= [];
-        $map = self::$maps[static::class] ??= new \WeakMap();
-        $map[$spacetime] ??= [];
-        $realValue = ($map[$spacetime][$key] ?? null)?->get() ?? new static($value, $spacetime);
-        $map[$spacetime][$key] = \WeakReference::create($realValue);
+        self::$maps ??= new WeakMap();
+        self::$maps[$spacetime] ??= [];
+        $realValue = (self::$maps[$spacetime][$key] ?? null)?->get() ?? new self($nanoseconds, $spacetime);
+        self::$maps[$spacetime][$key] = WeakReference::create($realValue);
 
         return $realValue;
     }
 
-    abstract protected function toDays(): float|int;
-
-    public function inHours(): Hours
+    public function inWeeks(): float
     {
-        return Hours::fromValue($this->toHours());
+        return $this->inDays() / $this->spacetime->weeksToDays(1);
     }
 
-    abstract protected function toHours(): float|int;
-
-    public function inMilliseconds(): Milliseconds
+    public function inDays(): float
     {
-        return Milliseconds::fromValue($this->toMilliseconds());
+        return $this->inHours() / $this->spacetime->daysToHours(1);
     }
 
-    abstract protected function toMilliseconds(): float|int;
-
-    public function inMinutes(): Minutes
+    public function inHours(): float
     {
-        return Minutes::fromValue($this->toMilliseconds());
+        return $this->inMinutes() / $this->spacetime->hoursToMinutes(1);
     }
 
-    public function inWeeks(): Weeks
+    public function inMinutes(): float
     {
-        return Weeks::fromValue($this->toWeeks());
+        return $this->inSeconds() / $this->spacetime->minutesToSeconds(1);
     }
 
-    abstract protected function toWeeks(): float|int;
 
-    public function inSeconds(): Seconds
+    public function inSeconds(): float
     {
-        return Seconds::fromValue($this->toSeconds());
+        return $this->inMilliseconds() / $this->spacetime->secondsToMilliseconds(1);
     }
 
-    abstract protected function toSeconds(): float|int;
-
-    public function inMicroseconds(): Microseconds
+    public function inMilliseconds(): float
     {
-        return Microseconds::fromValue($this->toMicroseconds());
+        return $this->inMicroseconds() / $this->spacetime->millisecondsToMicroseconds(1);
     }
 
-    abstract protected function toMicroseconds(): float|int;
-
-    public function inNanoseconds(): Nanoseconds
+    public function inMicroseconds(): float
     {
-        return Nanoseconds::fromValue($this->toNanoseconds());
+        return $this->value / $this->spacetime->microsecondsToNanoSeconds(1);
     }
 
-    abstract protected function toNanoseconds(): float|int;
+    public function inNanoseconds(): int
+    {
+        return $this->value;
+    }
 
     public function __clone(): void
     {
@@ -108,9 +91,9 @@ abstract class AnyTime
             throw new \InvalidArgumentException('Space time must be compatible');
         }
 
-        $result = $this->toNanoseconds() + $time->toNanoseconds();
+        $result = $this->inNanoseconds() + $time->inNanoseconds();
 
-        return static::from(Nanoseconds::fromValue($result));
+        return self::fromValue($result, $time->spacetime);
     }
 
     public function subtract(AnyTime $time): AnyTime
@@ -119,27 +102,23 @@ abstract class AnyTime
             throw new \InvalidArgumentException('Space time must be compatible');
         }
 
-        $result = $this->toNanoseconds() - $time->toNanoseconds();
-        return static::from(Nanoseconds::fromValue($result));
-    }
+        $result = $this->inNanoseconds() - $time->inNanoseconds();
 
-    public function asWhole(): AnyTime
-    {
-        return static::fromValue((int) $this->value, $this->spacetime);
+        return self::fromValue($result, $time->spacetime);
     }
 
     public function toDateInterval(): \DateInterval
     {
         $obj = $this;
-        $weeks = (int) $obj->toWeeks();
-        $totalDays = $days = (int) $obj->toDays();
-        $days -= $weeks * $this->spacetime->daysInWeeks();
-        $totalHours = $hours = (int) $obj->toHours();
-        $hours -= $totalDays * $this->spacetime->hoursInDays();
-        $totalMinutes = $minutes = (int) $obj->toMinutes();
-        $minutes -= $totalHours * $this->spacetime->minutesInHours();
-        $seconds = (int) $obj->toSeconds();
-        $seconds -= $totalMinutes * $this->spacetime->secondsInMinutes();
+        $weeks = (int) $obj->inWeeks();
+        $totalDays = $days = (int) $obj->inDays();
+        $days -= $this->spacetime->weeksToDays($weeks);
+        $totalHours = $hours = (int) $obj->inHours();
+        $hours -= $this->spacetime->daysToHours($totalDays);
+        $totalMinutes = $minutes = (int) $obj->inMinutes();
+        $minutes -= $this->spacetime->hoursToMinutes($totalHours);
+        $seconds = (int) $obj->inSeconds();
+        $seconds -= $this->spacetime->minutesToSeconds($totalMinutes);
 
         $string = [
             "P",
@@ -153,8 +132,4 @@ abstract class AnyTime
 
         return new DateInterval(implode("", $string));
     }
-
-    abstract protected function toMinutes(): float|int;
-
-    abstract public static function from(AnyTime $time): static;
 }

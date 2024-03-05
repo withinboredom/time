@@ -2,37 +2,42 @@
 
 namespace Withinboredom\Time;
 
-function Microseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): Microseconds
+function Nanoseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
 {
-    return Microseconds::fromValue($time, $spacetime);
+    return ($spacetime ?? StandardEarthTime::duration())->fromNanoSeconds($time);
 }
 
-function Milliseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): Milliseconds
+function Microseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
 {
-    return Milliseconds::fromValue($time, $spacetime);
+    return ($spacetime ?? StandardEarthTime::duration())->fromMicroseconds($time);
 }
 
-function Seconds(float $time, TimeAndSpaceInterface|null $spacetime = null): Seconds
+function Milliseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
 {
-    return Seconds::fromValue($time, $spacetime);
+    return ($spacetime ?? StandardEarthTime::duration())->fromMilliseconds($time);
 }
 
-function Minutes(float $time, TimeAndSpaceInterface|null $spacetime = null): Minutes
+function Seconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
 {
-    return Minutes::fromValue($time, $spacetime);
+    return ($spacetime ?? StandardEarthTime::duration())->fromSeconds($time);
 }
 
-function Hours(float $time, TimeAndSpaceInterface|null $spacetime = null): Hours
+function Minutes(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
 {
-    return Hours::fromValue($time, $spacetime);
+    return ($spacetime ?? StandardEarthTime::duration())->fromMinutes($time);
 }
 
-function Days(float $time, TimeAndSpaceInterface|null $spacetime = null): Days
+function Hours(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
 {
-    return Days::fromValue($time, $spacetime);
+    return ($spacetime ?? StandardEarthTime::duration())->fromHours($time);
 }
 
-function Weeks(float $time, TimeAndSpaceInterface|null $spacetime = null): Weeks
+function Days(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
 {
-    return Weeks::fromValue($time, $spacetime);
+    return ($spacetime ?? StandardEarthTime::duration())->fromDays($time);
+}
+
+function Weeks(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+{
+    return ($spacetime ?? StandardEarthTime::duration())->fromWeeks($time);
 }
