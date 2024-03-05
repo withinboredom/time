@@ -3,38 +3,24 @@
 This is a simple library for interacting with time durations. You can write your code to expect seconds:
 
 ```php
-function sleep(\Withinboredom\Time\Seconds $seconds): void {
-    \sleep($seconds->getValue());
+function sleep(\Withinboredom\Time\AnyTime $time): void {
+    \sleep($time->inSeconds());
 }
 
 sleep(\Withinboredom\Time\Minutes(5)->inSeconds());
 ```
 
-Alternatively, you can just expect any time and do the conversions yourself:
-
-```php
-function sleep(\Withinboredom\Time\AnyTime $amount): void {
-    \sleep($amount->inSeconds()->asWhole()->getValue());
-}
-
-sleep(\Withinboredom\Time\Hours(12));
-```
-
 ## Equality
 
-All values of the same unit are always strongly equaled to each other:
+All values of the same time are always strongly equaled to each other:
 
 ```php
-\Withinboredom\Time\Minutes::fromValue(60)->inHours() === \Withinboredom\Time\Hours::fromValue(1)
+\Withinboredom\Time\Minutes(60) === \Withinboredom\Time\Hours(1)
 ```
 
 ## Utilities
 
 There are also a few utility methods:
-
-> ->asWhole()
-
-Get a copy of the current duration without any fractional parts. Effectively truncates to an integer.
 
 > ->add(AnyTime)->subtract(AnyTime): AnyTime
 
@@ -46,33 +32,11 @@ Creates a date interval for use in other things.
 
 ## Conversions
 
-If you need to change the conversion rates, just create a new standard:
+If you need to change the conversion rates, create a new standard:
 
 ```php
 class Mars implements \Withinboredom\Time\TimeAndSpaceInterface {
-    public function microsecondsInMilliseconds(): float {
-        return 1000;
-    }
-    
-    public function millisecondsInSeconds(): float {
-        return 1000;
-    }
-    
-    public function secondsInMinutes(): float {
-        return 60;
-    }
-    
-    public function minutesInHours(): float {
-        return 60;
-    }
-    
-    public function hoursInDays(): float {
-        return 25;
-    }
-    
-    public function daysInWeeks(): float {
-        return 12;
-    }
+  /// ... fill in the blanks
 }
 ```
 
