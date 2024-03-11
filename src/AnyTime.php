@@ -15,7 +15,8 @@ final class AnyTime
     public function __destruct()
     {
         $key = (string) $this->value;
-        unset(self::$maps[$this->spacetime][$key]);
+        $map = &self::$maps[$this->spacetime];
+        unset($map[$key]);
     }
 
     public function getValue(): int|float
