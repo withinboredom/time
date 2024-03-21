@@ -41,3 +41,12 @@ function Weeks(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTi
 {
     return ($spacetime ?? StandardEarthTime::duration())->fromWeeks($time);
 }
+
+define('StandardNanosecond', Nanoseconds(1));
+define('StandardMicrosecond', Microseconds(1));
+define('StandardMillisecond', Milliseconds(1));
+define('StandardSecond', Seconds(1));
+define('StandardMinute', Minutes(1));
+define('StandardHour', Hours(1));
+define('StandardDay', Days(1));
+define('StandardWeek', Weeks(1));

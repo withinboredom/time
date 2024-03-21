@@ -114,6 +114,11 @@ final class AnyTime
         return self::fromValue($result, $time->spacetime);
     }
 
+    public function multiply(float $times): AnyTime
+    {
+        return self::fromValue($this->value * $times, $this->spacetime);
+    }
+
     public function toDateInterval(): \DateInterval
     {
         $obj = $this;
