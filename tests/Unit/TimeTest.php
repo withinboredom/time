@@ -1,6 +1,7 @@
 <?php
 
 use Withinboredom\Time\AnyTime;
+use Withinboredom\Time\StandardEarthTime;
 
 use function Withinboredom\Time\Days;
 use function Withinboredom\Time\Hours;
@@ -52,6 +53,12 @@ test("Date intervals work", function () {
 it('cannot be serialized', function () {
     $var = Seconds(1);
     expect(fn() => serialize($var))->toThrow(LogicException::class);
+});
+
+it('can be multiplied', function () {
+    $var = Seconds(1) * 2;
+    $var = AnyTime::fromValue($var, StandardEarthTime::duration());
+    expect($var)->toBe(Seconds(2));
 });
 
 it('cannot be cloned', function () {

@@ -7,7 +7,7 @@ function sleep(\Withinboredom\Time\AnyTime $time): void {
     \sleep($time->inSeconds());
 }
 
-sleep(\Withinboredom\Time\Minutes(5)->inSeconds());
+sleep(\Withinboredom\Time\Minutes(5));
 ```
 
 ## Equality
@@ -16,6 +16,40 @@ All values of the same time are always strongly equaled to each other:
 
 ```php
 \Withinboredom\Time\Minutes(60) === \Withinboredom\Time\Hours(1)
+```
+
+## Math
+
+If you have the GMP extension installed, you can use math operations.
+
+```php
+$minutes = \Withinboredom\Time\Minutes(5);
+$hour = $minutes * 6;
+```
+
+However, note that this results in a GMP number representing the time in nanoseconds, not an `AnyTime` object. To
+convert it back to an `AnyTime` object:
+
+```php
+$anytime = AnyTime::fromValue($hour, StandardEarthTime::duration());
+```
+
+Thus, you can write attributes that accept time:
+
+```php
+#[Attribute(Attribute::TARGET_METHOD)]
+class ScheduleEvery {
+    public AnyTime $schedule;
+    
+    public function __construct(AnyTime|\GMP $schedule) {
+        if($schedule instanceof \GMP) {
+            $schedule = AnyTime::fromValue($schedule, StandardEarthTime::duration());
+        }
+        $this->schedule = $schedule;
+    }
+}
+
+#[ScheduleEvery(StandardMinute * 5)] // schedule every 5 minutes
 ```
 
 ## Utilities

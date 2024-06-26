@@ -6,11 +6,14 @@ use DateInterval;
 use WeakMap;
 use WeakReference;
 
-final class AnyTime
+final class AnyTime extends BaseTime
 {
     private static WeakMap $maps;
 
-    private function __construct(private readonly float|int $value, protected readonly TimeAndSpaceInterface $spacetime) {}
+    private function __construct(private readonly float|int $value, protected readonly TimeAndSpaceInterface $spacetime)
+    {
+        parent::__construct($value, 10);
+    }
 
     public function __destruct()
     {
@@ -24,8 +27,12 @@ final class AnyTime
         return $this->value;
     }
 
-    public static function fromValue(int $nanoseconds, TimeAndSpaceInterface $spacetime): self
+    public static function fromValue(int|\GMP $nanoseconds, TimeAndSpaceInterface $spacetime): self
     {
+        if($nanoseconds instanceof \GMP) {
+            $nanoseconds = (int) $nanoseconds;
+        }
+
         $key = (string) $nanoseconds;
 
         self::$maps ??= new WeakMap();
@@ -90,6 +97,16 @@ final class AnyTime
     public function __sleep(): array
     {
         throw new \LogicException('Time cannot be serialized.');
+    }
+
+    public function __serialize(): array
+    {
+        throw new \LogicException('Time cannot be serialized.');
+    }
+
+    public function __unserialize(array $data): void
+    {
+        throw new \LogicException('Time cannot be unserialized.');
     }
 
     public function add(AnyTime $time): AnyTime

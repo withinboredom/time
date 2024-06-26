@@ -17,9 +17,12 @@
             "email": "landers.robert@gmail.com"
         }
     ],
+    "require": {
+        "php": "^8.0"
+    },
     "require-dev": {
-        "pestphp/pest": "^2.34",
-        "laravel/pint": "^1.14"
+        "pestphp/pest": "^2.34.8",
+        "laravel/pint": "^1.16.1"
     },
     "config": {
         "allow-plugins": {
