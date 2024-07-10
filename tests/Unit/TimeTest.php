@@ -1,7 +1,7 @@
 <?php
 
-use Withinboredom\Time\AnyTime;
-use Withinboredom\Time\StandardEarthTime;
+use Withinboredom\Time\Time;
+use Withinboredom\Time\TimeUnit;
 
 use function Withinboredom\Time\Days;
 use function Withinboredom\Time\Hours;
@@ -12,9 +12,10 @@ use function Withinboredom\Time\Nanoseconds;
 use function Withinboredom\Time\Seconds;
 use function Withinboredom\Time\Weeks;
 
-test('unit', function (AnyTime $time, int $week) {
-    expect($time)->toBe(Weeks(1))
-        ->and($time->inWeeks())->toBe(1.0);
+test('unit', function (Time $time, int $week) {
+    expect($time)
+        ->toBe(Weeks(1))
+        ->and($time->as(TimeUnit::Weeks))->toBe(1.0);
 })->with([
     'weeks' => [Weeks(1), 1],
     'days' => [Days(7), 7],
@@ -29,7 +30,8 @@ test('unit', function (AnyTime $time, int $week) {
 test('equality', function () {
     $secondInMs = Milliseconds(1000);
     $second = Seconds(1);
-    expect($second)->toBe(Seconds(1))
+    expect($second)
+        ->toBe(Seconds(1))
         ->and($secondInMs)->toEqual(Seconds(1));
 });
 
@@ -45,20 +47,15 @@ test("Date intervals work", function () {
 
     $interval = $var->toDateInterval();
 
-    expect($var->inSeconds())->toBe(694861.0)
+    expect($var->as(TimeUnit::Seconds))
+        ->toBe(694861.0)
         ->and($now->add($interval))->toEqual($expected)
-        ->and($var->inSeconds())->toBe(694861.0);
+        ->and($var->as(TimeUnit::Seconds))->toBe(694861.0);
 });
 
 it('cannot be serialized', function () {
     $var = Seconds(1);
     expect(fn() => serialize($var))->toThrow(LogicException::class);
-});
-
-it('can be multiplied', function () {
-    $var = Seconds(1) * 2;
-    $var = AnyTime::fromValue($var, StandardEarthTime::duration());
-    expect($var)->toBe(Seconds(2));
 });
 
 it('cannot be cloned', function () {
@@ -68,10 +65,14 @@ it('cannot be cloned', function () {
 
 it('can be compared', function () {
     $middle = Seconds(3);
-    $left  = Seconds(1);
+    $left = Seconds(1);
     $right = Seconds(5);
 
-    expect($left < $middle)->toBeTrue()
+    expect(Time::from(TimeUnit::Seconds, 1) < Time::from(TimeUnit::Milliseconds, 1))
+        ->toBeFalse()
+        ->and($left < $middle)
+        ->toBeTrue()
         ->and($right > $middle)->toBeTrue()
-        ->and($left < $right)->toBeTrue();
+        ->and($left < $right)->toBeTrue()
+        ->and($left > $middle)->toBeFalse();
 });

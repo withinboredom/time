@@ -1,10 +1,11 @@
 # A really simple library for converting time
 
-This is a simple library for interacting with time durations. You can write your code to expect seconds:
+This is a simple library for interacting with time durations.
+You can write your code to expect time and know that is what you have:
 
 ```php
-function sleep(\Withinboredom\Time\AnyTime $time): void {
-    \sleep($time->inSeconds());
+function sleep(\Withinboredom\Time\Time $time): void {
+    \sleep($time->as(\Withinboredom\Time\TimeUnit::Seconds));
 }
 
 sleep(\Withinboredom\Time\Minutes(5));
@@ -18,63 +19,17 @@ All values of the same time are always strongly equaled to each other:
 \Withinboredom\Time\Minutes(60) === \Withinboredom\Time\Hours(1)
 ```
 
-## Math
-
-If you have the GMP extension installed, you can use math operations.
-
-```php
-$minutes = \Withinboredom\Time\Minutes(5);
-$hour = $minutes * 6;
-```
-
-However, note that this results in a GMP number representing the time in nanoseconds, not an `AnyTime` object. To
-convert it back to an `AnyTime` object:
-
-```php
-$anytime = AnyTime::fromValue($hour, StandardEarthTime::duration());
-```
-
-Thus, you can write attributes that accept time:
-
-```php
-#[Attribute(Attribute::TARGET_METHOD)]
-class ScheduleEvery {
-    public AnyTime $schedule;
-    
-    public function __construct(AnyTime|\GMP $schedule) {
-        if($schedule instanceof \GMP) {
-            $schedule = AnyTime::fromValue($schedule, StandardEarthTime::duration());
-        }
-        $this->schedule = $schedule;
-    }
-}
-
-#[ScheduleEvery(StandardMinute * 5)] // schedule every 5 minutes
-```
-
 ## Utilities
 
 There are also a few utility methods:
 
-> ->add(AnyTime)->subtract(AnyTime): AnyTime
+> ->add(Time)->subtract(Time): AnyTime
 
 Add and subtract durations.
 
 > ->toDateInterval(): DateInterval
 
 Creates a date interval for use in other things.
-
-## Conversions
-
-If you need to change the conversion rates, create a new standard:
-
-```php
-class Mars implements \Withinboredom\Time\TimeAndSpaceInterface {
-  /// ... fill in the blanks
-}
-```
-
-This can be (mis)used to allow for very short times in unit tests (to make a week pass by in literally microseconds).
 
 ## Units
 
@@ -90,16 +45,11 @@ This can be (mis)used to allow for very short times in unit tests (to make a wee
 
 > Why not months/years?
 
-There's no set days in a month/year, so it's better to use `DateInterval` for those types of measures.
+There's no set days in a month/year, so it’s better to use `DateInterval` for those types of measures.
 
 > Why does this exist?
 
-I don't
-like [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)#:~:text=Magic%20numbers%20are%20common%20in%20programs%20across%20many,have%20such%20constants%20that%20identify%20the%20contained%20data.).
-
-> Can I convert between standards?
-
-Not yet.
+I don’t like [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)#:~:text=Magic%20numbers%20are%20common%20in%20programs%20across%20many,have%20such%20constants%20that%20identify%20the%20contained%20data.).
 
 > How performant is this?
 

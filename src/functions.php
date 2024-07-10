@@ -2,51 +2,51 @@
 
 namespace Withinboredom\Time;
 
-function Nanoseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Nanoseconds(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromNanoSeconds($time);
+    return Time::from(TimeUnit::Nanoseconds, $time);
 }
 
-function Microseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Microseconds(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromMicroseconds($time);
+    return Time::from(TimeUnit::Microseconds, $time);
 }
 
-function Milliseconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Milliseconds(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromMilliseconds($time);
+    return Time::from(TimeUnit::Milliseconds, $time);
 }
 
-function Seconds(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Seconds(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromSeconds($time);
+    return Time::from(TimeUnit::Seconds, $time);
 }
 
-function Minutes(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Minutes(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromMinutes($time);
+    return Time::from(TimeUnit::Minutes, $time);
 }
 
-function Hours(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Hours(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromHours($time);
+    return Time::from(TimeUnit::Hours, $time);
 }
 
-function Days(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Days(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromDays($time);
+    return Time::from(TimeUnit::Days, $time);
 }
 
-function Weeks(float $time, TimeAndSpaceInterface|null $spacetime = null): AnyTime
+function Weeks(float $time): Time
 {
-    return ($spacetime ?? StandardEarthTime::duration())->fromWeeks($time);
+    return Time::from(TimeUnit::Weeks, $time);
 }
 
-define('StandardNanosecond', Nanoseconds(1));
-define('StandardMicrosecond', Microseconds(1));
-define('StandardMillisecond', Milliseconds(1));
-define('StandardSecond', Seconds(1));
-define('StandardMinute', Minutes(1));
-define('StandardHour', Hours(1));
-define('StandardDay', Days(1));
-define('StandardWeek', Weeks(1));
+define('Nanosecond', Nanoseconds(1));
+define('Microsecond', Microseconds(1));
+define('Millisecond', Milliseconds(1));
+define('Second', Seconds(1));
+define('Minute', Minutes(1));
+define('Hour', Hours(1));
+define('Day', Days(1));
+define('Week', Weeks(1));
